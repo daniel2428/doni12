@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Список задач</h2>
+
+<form method="get" class="d-flex gap-2 mb-3">
+    <select name="category" class="form-select w-auto">
+        <option value="">Все категории</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="search" class="form-control" placeholder="Поиск..." value="{{ request.GET.search }}">
+    <button class="btn btn-primary">Поиск</button>
+</form>
+
+<ul class="list-group">
+    {% for task in tasks %}
+        <li class="list-group-item">
+            <a href="{% url 'task-detail' task.id %}">{{ task.title }}</a> — <small>{{ task.category.name }}</small>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Задач пока нет</li>
+    {% endfor %}
+</ul>
+{% endblock %}
